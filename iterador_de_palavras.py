@@ -7,7 +7,7 @@ import os
 indice_palavra = 0
 em_execucao = False
 palavras = []
-intervalo = 1000  # Intervalo inicial em milissegundos (1 segundo)
+intervalo = 500  # Intervalo inicial em milissegundos (1 segundo)
 
 # Caminho do arquivo de configuração
 config_file = "config.json"
