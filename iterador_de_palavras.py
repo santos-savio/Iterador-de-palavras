@@ -85,8 +85,21 @@ def iniciar():
 
 # Função para pausar a exibição
 def pausar():
-    global em_execucao
-    em_execucao = False
+    global em_execucao, play_pause
+    if em_execucao:
+        em_execucao = False
+        # Atualiza o texto do botão para "Retomar" se a execução estiver pausada
+        botao_pausar.config(text="Retomar")
+        botao_pausar.update()  # Atualiza o botão imediatamente
+        
+    else:
+        # Se a execução estiver pausada, retoma a exibição
+        em_execucao = True
+        botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
+        botao_pausar.update()  # Atualiza o botão imediatamente
+        atualizar_label()  # Retoma a exibição do texto
+        pass
+    
 
 # Função para reiniciar a exibição
 def reiniciar():
