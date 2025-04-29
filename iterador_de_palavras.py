@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import json
 import os
-import time
+import keyboard
 
 # Variáveis globais
 indice_palavra = 0
@@ -53,6 +53,7 @@ def criar_segunda_janela():
 
 # Atualiza o texto na segunda janela
 def atualizar_label():
+    ajustar_intervalo()  # Ajusta o intervalo com base na PPM
     global indice_palavra, em_execucao, texto
     # Verifica se a execução está ativa e se ainda há palavras para exibir
     if em_execucao and indice_palavra < len(palavras):
@@ -76,9 +77,9 @@ def atualizar_label():
         elif "?" in texto:
         # Se houver uma queba de linha, atrasa 220%
             janela.after(int(intervalo * 2,2), atualizar_label)
-        # Se houver uma quebra de linha, atrasa 150%
+        # Se houver uma quebra de linha, atrasa 350%
         elif "\n" in texto:
-            janela.after(int(intervalo * 1.5), atualizar_label)
+            janela.after(int(intervalo * 2.5), atualizar_label)
         # Se for uma palavra regular, executa imediatamente
         else:
             janela.after(intervalo, atualizar_label)
@@ -108,7 +109,7 @@ def iniciar():
 
 # Função para pausar a exibição
 def pausar():
-    global em_execucao, play_pause
+    global em_execucao
     if em_execucao:
         em_execucao = False
         # Atualiza o texto do botão para "Retomar" se a execução estiver pausada
@@ -132,6 +133,9 @@ def reiniciar():
     texto = ""  # Limpa o texto
     label.config(text="")  # Limpa a label
     label_segunda_janela.config(text="")  # Limpa a label da segunda janela
+
+    botao_pausar.config(text="Pausar")  # Reseta o texto do botão para "Pausar"
+    botao_pausar.update()  # Atualiza o botão imediatamente
 
 # Função para carregar o arquivo .txt
 def carregar_arquivo():
@@ -182,6 +186,9 @@ def colar_texto():
     text_input.delete("1.0", tk.END)  # Limpa o campo de texto
     text_input.insert("1.0", texto_copiado)  # Insere o texto copiado no campo de texto
 
+keyboard.add_hotkey("ctrl+v", colar_texto)  # Cola o texto com Ctrl+V
+
+
 # Configuração da janela principal
 janela = tk.Tk()
 janela.title("Iterador de Palavras")
@@ -214,8 +221,6 @@ frame_ppm.pack(side="left", padx=(0, 20))  # Adiciona espaçamento à direita
 tk.Label(frame_ppm, text="Velocidade (PPM):", font=("Arial", 14), bg="gray30", fg="white").pack(side="left")
 entry_ppm = tk.Entry(frame_ppm, width=5, font=("Arial", 14), bg="gray40", fg="white", insertbackground="white")  # Fundo cinza escuro, texto branco
 entry_ppm.pack(side="left", padx=5)
-botao_definir_ppm = tk.Button(frame_ppm, text="Definir", command=ajustar_intervalo, font=("Arial", 12), bg="gray40", fg="white")
-botao_definir_ppm.pack(side="left")
 
 # Carrega o valor de PPM salvo no arquivo de configuração
 carregar_config()
