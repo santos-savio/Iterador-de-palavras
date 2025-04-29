@@ -87,25 +87,28 @@ def atualizar_label():
 # Função para iniciar a exibição (agora inclui a funcionalidade de "Usar Texto Inserido")
 def iniciar():
     global em_execucao, palavras
-    # Obtém o texto do campo de entrada manual, se houver
-    conteudo = text_input.get("1.0", tk.END).strip()
-    
-    botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
-    botao_pausar.update()  # Atualiza o botão imediatamente
-    
-    if conteudo:
-        palavras = conteudo.split()  # Divide o texto em palavras
-        reiniciar()  # Reinicia a exibição para o novo conteúdo
-        label_arquivo.config(text="Texto inserido manualmente")  # Atualiza o rótulo do arquivo
-    elif not palavras:
-        messagebox.showwarning("Atenção", "Carregue um arquivo de texto ou insira o texto manualmente.")
-        return
+    if not em_execucao: # Verifica se a execução não está ativa
+        # Obtém o texto do campo de entrada manual, se houver
+        conteudo = text_input.get("1.0", tk.END).strip()
+        
+        botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
+        botao_pausar.update()  # Atualiza o botão imediatamente
+        
+        if conteudo:
+            palavras = conteudo.split()  # Divide o texto em palavras
+            reiniciar()  # Reinicia a exibição para o novo conteúdo
+            label_arquivo.config(text="Texto inserido manualmente")  # Atualiza o rótulo do arquivo
+        elif not palavras:
+            messagebox.showwarning("Atenção", "Carregue um arquivo de texto ou insira o texto manualmente.")
+            return
 
-
-    # Inicia a exibição do texto
-    if palavras and not em_execucao:
-        em_execucao = True
-        atualizar_label()
+        # Inicia a exibição do texto
+        if palavras:
+            em_execucao = True
+            atualizar_label()
+    else:
+        # Se a execução já estiver ativa, não faz nada
+        pass
 
 # Função para pausar a exibição
 def pausar():
