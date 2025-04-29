@@ -8,6 +8,7 @@ indice_palavra = 0
 em_execucao = False
 palavras = []
 intervalo = 1000  # Intervalo inicial em milissegundos (1 segundo)
+texto = ""  # Texto a ser exibido
 
 # Caminho do arquivo de configuração
 config_file = "config.json"
@@ -51,7 +52,8 @@ def criar_segunda_janela():
 
 # Atualiza o texto na segunda janela
 def atualizar_label():
-    global indice_palavra, em_execucao
+    global indice_palavra, em_execucao, texto
+    # Verifica se a execução está ativa e se ainda há palavras para exibir
     if em_execucao and indice_palavra < len(palavras):
         texto = palavras[indice_palavra]
         indice_palavra += 1  # Avança para a próxima palavra
@@ -88,10 +90,12 @@ def pausar():
 
 # Função para reiniciar a exibição
 def reiniciar():
-    global indice_palavra, em_execucao
+    global texto, indice_palavra, em_execucao
     indice_palavra = 0
     em_execucao = False
     label.config(text="")  # Limpa a label
+    texto = ""  # Limpa o texto
+    label_segunda_janela.config(text="")  # Limpa a label da segunda janela
 
 # Função para carregar o arquivo .txt
 def carregar_arquivo():
@@ -105,6 +109,8 @@ def carregar_arquivo():
         # Exibe o nome do arquivo selecionado
         nome_arquivo = filepath.split("/")[-1]
         label_arquivo.config(text=f"Arquivo: {nome_arquivo}")
+        text_input.delete("1.0", tk.END)  # Limpa o campo de texto manual
+        text_input.insert("1.0", conteudo)  # Insere o conteúdo do arquivo no campo de texto manual
         messagebox.showinfo("Sucesso", "Arquivo carregado com sucesso!")
 
 # Função para definir o texto da área de entrada manual como conteúdo a ser exibido
