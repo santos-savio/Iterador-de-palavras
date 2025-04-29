@@ -195,9 +195,19 @@ def colar_texto():
     text_input.insert("1.0", texto_copiado)  # Insere o texto copiado no campo de texto
 
 
-# Atalhos de teclado
-keyboard.add_hotkey("ctrl+v", colar_texto)  # Cola o texto com Ctrl+V
-keyboard.add_hotkey(" ", iniciar)  # Inicia/pausa a exibição com a barra de espaço
+# Função para iniciar/pausar a exibição apenas se a janela estiver em foco
+def iniciar_com_foco():
+    if janela.focus_get():  # Verifica se a janela está em foco
+        iniciar()
+
+# Função para colar texto apenas se a janela estiver em foco
+def colar_texto_com_foco():
+    if janela.focus_get():  # Verifica se a janela está em foco
+        colar_texto()
+
+# Atalhos de teclado condicionados ao foco da janela
+keyboard.add_hotkey("ctrl+v", colar_texto_com_foco)  # Cola o texto com Ctrl+V
+keyboard.add_hotkey("space", iniciar_com_foco)  # Inicia/pausa a exibição com a barra de espaço
 
 # Configuração da janela principal
 janela = tk.Tk()
