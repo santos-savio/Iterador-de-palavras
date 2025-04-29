@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import json
 import os
+import time
 
 # Variáveis globais
 indice_palavra = 0
@@ -63,13 +64,34 @@ def atualizar_label():
         label_segunda_janela.config(text=texto)
 
         # Chama a função novamente após o intervalo
-        janela.after(intervalo, atualizar_label)
+        # janela.after(intervalo, atualizar_label)
+
+        # Se houver uma vírgula na palavra, atrasa 150%
+        if "," in texto:
+            janela.after(int(intervalo * 1.5), atualizar_label)
+        # Se houver um ponto na palavra, atrasa 200%
+        elif "." in texto:
+            janela.after(int(intervalo * 2), atualizar_label)
+        # Se houver um ponto de interrogação na palavra, atrasa 120%
+        elif "?" in texto:
+        # Se houver uma queba de linha, atrasa 220%
+            janela.after(int(intervalo * 2,2), atualizar_label)
+        # Se houver uma quebra de linha, atrasa 150%
+        elif "\n" in texto:
+            janela.after(int(intervalo * 1.5), atualizar_label)
+        # Se for uma palavra regular, executa imediatamente
+        else:
+            janela.after(intervalo, atualizar_label)
 
 # Função para iniciar a exibição (agora inclui a funcionalidade de "Usar Texto Inserido")
 def iniciar():
     global em_execucao, palavras
     # Obtém o texto do campo de entrada manual, se houver
     conteudo = text_input.get("1.0", tk.END).strip()
+    
+    botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
+    botao_pausar.update()  # Atualiza o botão imediatamente
+    
     if conteudo:
         palavras = conteudo.split()  # Divide o texto em palavras
         reiniciar()  # Reinicia a exibição para o novo conteúdo
@@ -77,6 +99,7 @@ def iniciar():
     elif not palavras:
         messagebox.showwarning("Atenção", "Carregue um arquivo de texto ou insira o texto manualmente.")
         return
+
 
     # Inicia a exibição do texto
     if palavras and not em_execucao:
@@ -106,8 +129,8 @@ def reiniciar():
     global texto, indice_palavra, em_execucao
     indice_palavra = 0
     em_execucao = False
-    label.config(text="")  # Limpa a label
     texto = ""  # Limpa o texto
+    label.config(text="")  # Limpa a label
     label_segunda_janela.config(text="")  # Limpa a label da segunda janela
 
 # Função para carregar o arquivo .txt
@@ -166,7 +189,8 @@ try:
     janela.iconbitmap("Logo-final.ico")
 except Exception as e:
     print(f"Erro ao carregar o ícone: {e}")
-janela.geometry("580x650+-1286+250")  # Define tamanho e posição (0px da esquerda, 0px do topo)
+# janela.geometry("580x650+-1286+250")  # Define tamanho e posição (0px da esquerda, 0px do topo)
+janela.geometry("580x630+150+0")  # Define tamanho e posição (0px da esquerda, 0px do topo)
 janela.configure(bg="gray20")  # Define a cor de fundo para cinza escuro
 
 # Inicialização dos elementos
