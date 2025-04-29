@@ -101,7 +101,9 @@ def iniciar():
             # reiniciar()  # Reinicia a exibição para o novo conteúdo
             label_arquivo.config(text="Texto inserido manualmente")  # Atualiza o rótulo do arquivo
         elif not palavras:
-            messagebox.showwarning("Atenção", "Carregue um arquivo de texto ou insira o texto manualmente.")
+            pergunta = messagebox.askyesno("Atenção", "Deseja colar o conteúdo da área de transferência?")
+            if pergunta:
+                colar_texto()
             return
 
         # Inicia a exibição do texto
@@ -116,21 +118,21 @@ def iniciar():
 
 
 # Função para pausar a exibição
-def pausar():
-    global em_execucao
-    if em_execucao:
-        em_execucao = False
-        # Atualiza o texto do botão para "Retomar" se a execução estiver pausada
-        botao_pausar.config(text="Retomar")
-        botao_pausar.update()  # Atualiza o botão imediatamente
+# def pausar():
+#     global em_execucao
+#     if em_execucao:
+#         em_execucao = False
+#         # Atualiza o texto do botão para "Retomar" se a execução estiver pausada
+#         botao_pausar.config(text="Retomar")
+#         botao_pausar.update()  # Atualiza o botão imediatamente
         
-    else:
-        # Se a execução estiver pausada, retoma a exibição
-        em_execucao = True
-        botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
-        botao_pausar.update()  # Atualiza o botão imediatamente
-        atualizar_label()  # Retoma a exibição do texto
-        pass
+#     else:
+#         # Se a execução estiver pausada, retoma a exibição
+#         em_execucao = True
+#         botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
+#         botao_pausar.update()  # Atualiza o botão imediatamente
+#         atualizar_label()  # Retoma a exibição do texto
+        # pass
     
 
 # Função para reiniciar a exibição
@@ -141,9 +143,6 @@ def reiniciar():
     texto = ""  # Limpa o texto
     label.config(text="")  # Limpa a label
     label_segunda_janela.config(text="")  # Limpa a label da segunda janela
-
-    botao_pausar.config(text="Pausar")  # Reseta o texto do botão para "Pausar"
-    botao_pausar.update()  # Atualiza o botão imediatamente
 
 # Função para carregar o arquivo .txt
 def carregar_arquivo():
@@ -275,9 +274,6 @@ frame_botoes.pack(side="right")
 # Botões de controle
 botao_iniciar = tk.Button(frame_botoes, text="Iniciar", command=iniciar, font=("Arial", 12), bg="gray40", fg="white")
 botao_iniciar.pack(pady=5)
-
-botao_pausar = tk.Button(frame_botoes, text="Pausar", command=pausar, font=("Arial", 12), bg="gray40", fg="white")
-botao_pausar.pack(pady=5)
 
 botao_reiniciar = tk.Button(frame_botoes, text="Reiniciar", command=reiniciar, font=("Arial", 12), bg="gray40", fg="white")
 botao_reiniciar.pack(pady=5)
