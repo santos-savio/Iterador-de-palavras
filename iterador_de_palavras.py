@@ -143,6 +143,8 @@ def reiniciar():
     texto = ""  # Limpa o texto
     label.config(text="")  # Limpa a label
     label_segunda_janela.config(text="")  # Limpa a label da segunda janela
+    botao_iniciar.config(text="Iniciar")  # Atualiza o texto do botão para "Iniciar"
+    botao_iniciar.update()  # Atualiza o botão imediatamente
 
 # Função para carregar o arquivo .txt
 def carregar_arquivo():
@@ -247,9 +249,10 @@ entry_ppm.pack(side="left", padx=5)
 carregar_config()
 criar_segunda_janela()  # Cria a segunda janela ao iniciar
 
-# Botão para carregar o arquivo
-botao_carregar = tk.Button(frame_controle, text="Carregar Arquivo", command=carregar_arquivo, font=("Arial", 12), bg="gray40", fg="white")
-botao_carregar.pack(side="left", padx=(0, 20))  # Adiciona espaçamento à direita
+# # Botão para carregar o arquivo
+# botao_carregar = tk.Button(frame_controle, text="Carregar Arquivo", command=carregar_arquivo, font=("Arial", 12), bg="gray40", fg="white")
+# botao_carregar.pack(side="left", padx=(0, 20))  # Adiciona espaçamento à direita
+
 
 # Label para exibir o nome do arquivo selecionado
 label_arquivo = tk.Label(janela, text="Arquivo: Nenhum arquivo carregado", font=("Arial", 12), bg="gray30", fg="white")
@@ -259,6 +262,10 @@ label_arquivo.pack()
 tk.Label(janela, text="Ou insira o texto abaixo:", font=("Arial", 12), bg="gray30", fg="white").pack(pady=10)
 text_input = tk.Text(janela, height=8, width=60, font=("Arial", 12), bg="gray40", fg="white", insertbackground="white")
 text_input.pack(pady=5)
+
+# Botão para carregar o arquivo
+botao_carregar = tk.Button(janela, text="Carregar Arquivo", command=carregar_arquivo, font=("Arial", 12), bg="gray40", fg="white")
+botao_carregar.pack(pady=5)
 
 # Botões para colar e limpar texto
 botao_colar_texto = tk.Button(janela, text="Colar Texto", command=colar_texto, font=("Arial", 12), bg="gray40", fg="white")
