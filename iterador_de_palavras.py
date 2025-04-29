@@ -91,12 +91,14 @@ def iniciar():
         # Obtém o texto do campo de entrada manual, se houver
         conteudo = text_input.get("1.0", tk.END).strip()
         
-        botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
-        botao_pausar.update()  # Atualiza o botão imediatamente
+        # botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
+        # botao_pausar.update()  # Atualiza o botão imediatamente
+        botao_iniciar.config(text="Pausar")  # Atualiza o texto do botão Iniciar para "Pausar"
+        botao_iniciar.update()  # Atualiza o botão imediatamente
         
         if conteudo:
             palavras = conteudo.split()  # Divide o texto em palavras
-            reiniciar()  # Reinicia a exibição para o novo conteúdo
+            # reiniciar()  # Reinicia a exibição para o novo conteúdo
             label_arquivo.config(text="Texto inserido manualmente")  # Atualiza o rótulo do arquivo
         elif not palavras:
             messagebox.showwarning("Atenção", "Carregue um arquivo de texto ou insira o texto manualmente.")
@@ -106,9 +108,12 @@ def iniciar():
         if palavras:
             em_execucao = True
             atualizar_label()
-    else:
-        # Se a execução já estiver ativa, não faz nada
-        pass
+    else: # A execução já está ativa
+        # O botão se transforma em "Pausar" e a execução é pausada
+        em_execucao = False
+        botao_iniciar.config(text="Iniciar")
+        botao_iniciar.update()
+
 
 # Função para pausar a exibição
 def pausar():
@@ -189,8 +194,10 @@ def colar_texto():
     text_input.delete("1.0", tk.END)  # Limpa o campo de texto
     text_input.insert("1.0", texto_copiado)  # Insere o texto copiado no campo de texto
 
-keyboard.add_hotkey("ctrl+v", colar_texto)  # Cola o texto com Ctrl+V
 
+# Atalhos de teclado
+keyboard.add_hotkey("ctrl+v", colar_texto)  # Cola o texto com Ctrl+V
+keyboard.add_hotkey(" ", iniciar)  # Inicia/pausa a exibição com a barra de espaço
 
 # Configuração da janela principal
 janela = tk.Tk()
