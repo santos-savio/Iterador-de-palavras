@@ -195,10 +195,12 @@ keyboard.add_hotkey("ctrl+v", colar_texto)  # Cola o texto com Ctrl+V
 # Configuração da janela principal
 janela = tk.Tk()
 janela.title("Iterador de Palavras")
-try:
-    janela.iconbitmap("Logo-final.ico")
-except Exception as e:
-    print(f"Erro ao carregar o ícone: {e}")
+
+# try:
+#     janela.iconbitmap("Logo-final.ico")
+# except Exception as e:
+#     print(f"Erro ao carregar o ícone: {e}")
+
 # janela.geometry("580x650+-1286+250")  # Define tamanho e posição (0px da esquerda, 0px do topo)
 janela.geometry("580x630+150+0")  # Define tamanho e posição (0px da esquerda, 0px do topo)
 janela.configure(bg="gray20")  # Define a cor de fundo para cinza escuro
