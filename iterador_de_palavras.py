@@ -62,10 +62,10 @@ def atualizar_label():
 
         # Atualiza as labels na janela principal e na segunda janela
         label.config(text=texto)
-        label_segunda_janela.config(text=texto)
-
-        # Chama a função novamente após o intervalo
-        # janela.after(intervalo, atualizar_label)
+        # Se houver a segunda janela, atualiza o texto dela também
+        if 'segunda_janela' in globals() and segunda_janela.winfo_exists():
+            # Atualiza o texto na segunda janela
+            label_segunda_janela.config(text=texto)
 
         # Se houver uma vírgula na palavra, atrasa 150%
         if "," in texto:
@@ -84,15 +84,16 @@ def atualizar_label():
         else:
             janela.after(intervalo, atualizar_label)
 
+    elif indice_palavra >= len(palavras):
+        # Se não houver mais palavras, reinicia a exibição
+        reiniciar()
+
 # Função para iniciar a exibição (agora inclui a funcionalidade de "Usar Texto Inserido")
 def iniciar():
     global em_execucao, palavras
     if not em_execucao: # Verifica se a execução não está ativa
         # Obtém o texto do campo de entrada manual, se houver
         conteudo = text_input.get("1.0", tk.END).strip()
-        
-        # botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
-        # botao_pausar.update()  # Atualiza o botão imediatamente
         botao_iniciar.config(text="Pausar")  # Atualiza o texto do botão Iniciar para "Pausar"
         botao_iniciar.update()  # Atualiza o botão imediatamente
         
@@ -115,24 +116,6 @@ def iniciar():
         em_execucao = False
         botao_iniciar.config(text="Iniciar")
         botao_iniciar.update()
-
-
-# Função para pausar a exibição
-# def pausar():
-#     global em_execucao
-#     if em_execucao:
-#         em_execucao = False
-#         # Atualiza o texto do botão para "Retomar" se a execução estiver pausada
-#         botao_pausar.config(text="Retomar")
-#         botao_pausar.update()  # Atualiza o botão imediatamente
-        
-#     else:
-#         # Se a execução estiver pausada, retoma a exibição
-#         em_execucao = True
-#         botao_pausar.config(text="Pausar")  # Atualiza o texto do botão para "Pausar"
-#         botao_pausar.update()  # Atualiza o botão imediatamente
-#         atualizar_label()  # Retoma a exibição do texto
-        # pass
     
 
 # Função para reiniciar a exibição
@@ -142,7 +125,9 @@ def reiniciar():
     em_execucao = False
     texto = ""  # Limpa o texto
     label.config(text="")  # Limpa a label
-    label_segunda_janela.config(text="")  # Limpa a label da segunda janela
+    if segunda_janela.winfo_exists():
+        # Se a segunda janela existir, limpa o texto dela também
+        label_segunda_janela.config(text="")  # Limpa a label da segunda janela
     botao_iniciar.config(text="Iniciar")  # Atualiza o texto do botão para "Iniciar"
     botao_iniciar.update()  # Atualiza o botão imediatamente
 
@@ -170,7 +155,6 @@ def definir_texto_manual():
         palavras = conteudo.split()
         reiniciar()  # Reinicia a exibição para o novo conteúdo
         label_arquivo.config(text="Texto inserido manualmente")  # Atualiza o rótulo do arquivo
-        #messagebox.showinfo("Sucesso", "Texto inserido com sucesso!")
     else:
         messagebox.showwarning("Atenção", "Por favor, insira algum texto no campo.")
 
@@ -188,6 +172,13 @@ def ajustar_intervalo(ppm=None):
 def limpar_texto():
     text_input.delete("1.0", tk.END)
     label_arquivo.config(text="Arquivo: Nenhum arquivo carregado")
+    # Limpa o texto na segunda janela, se existir
+    if 'segunda_janela' in globals() and segunda_janela.winfo_exists():
+        label_segunda_janela.config(text="")  # Limpa o texto na segunda janela
+    # Limpa a memória de palavras
+    global palavras
+    palavras = []  # Limpa a lista de palavras
+    reiniciar()  # Reinicia a exibição
 
 # Função para colar texto da área de transferência no campo de entrada
 def colar_texto():
@@ -248,11 +239,6 @@ entry_ppm.pack(side="left", padx=5)
 # Carrega o valor de PPM salvo no arquivo de configuração
 carregar_config()
 criar_segunda_janela()  # Cria a segunda janela ao iniciar
-
-# # Botão para carregar o arquivo
-# botao_carregar = tk.Button(frame_controle, text="Carregar Arquivo", command=carregar_arquivo, font=("Arial", 12), bg="gray40", fg="white")
-# botao_carregar.pack(side="left", padx=(0, 20))  # Adiciona espaçamento à direita
-
 
 # Label para exibir o nome do arquivo selecionado
 label_arquivo = tk.Label(janela, text="Arquivo: Nenhum arquivo carregado", font=("Arial", 12), bg="gray30", fg="white")
