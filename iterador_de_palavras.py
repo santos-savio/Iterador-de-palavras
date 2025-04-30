@@ -163,13 +163,17 @@ def definir_texto_manual():
 
 # Função para ajustar o intervalo com base na PPM e salvar a configuração
 def ajustar_intervalo(ppm=None):
-    global intervalo
+    global intervalo, em_execucao
     try:
         ppm = int(entry_ppm.get()) if ppm is None else ppm
         intervalo = int(60000 / ppm)  # Converte PPM para intervalo em milissegundos
         salvar_config(ppm)
     except ValueError:
         messagebox.showerror("Erro", "Por favor, insira um valor numérico válido para PPM.")
+        # O botão Iniciar se transforma em "Pausar" e a execução é pausada
+        em_execucao = False
+        botao_iniciar.config(text="Iniciar")
+        botao_iniciar.update()
 
 # Função para limpar o campo de entrada de texto manual
 def limpar_texto():
