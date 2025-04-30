@@ -3,6 +3,7 @@ from tkinter import filedialog, messagebox
 import json
 import os
 import keyboard
+import time
 
 # Variáveis globais
 indice_palavra = 0
@@ -105,6 +106,8 @@ def iniciar():
             pergunta = messagebox.askyesno("Atenção", "Deseja colar o conteúdo da área de transferência?")
             if pergunta:
                 colar_texto()
+                time.sleep(0.5) 
+                iniciar()
             return
 
         # Inicia a exibição do texto
