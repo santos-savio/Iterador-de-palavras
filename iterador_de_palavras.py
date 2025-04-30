@@ -192,6 +192,8 @@ def colar_texto():
     texto_copiado = janela.clipboard_get()  # Obtém o texto da área de transferência
     text_input.delete("1.0", tk.END)  # Limpa o campo de texto
     text_input.insert("1.0", texto_copiado)  # Insere o texto copiado no campo de texto
+    if texto_copiado:
+        label_arquivo.config(text="Texto colado da área de transferência")  # Atualiza o rótulo do arquivo
 
 
 # Função para iniciar/pausar a exibição apenas se a janela estiver em foco
@@ -217,30 +219,34 @@ janela.title("Iterador de Palavras")
 # except Exception as e:
 #     print(f"Erro ao carregar o ícone: {e}")
 
-# janela.geometry("580x650+-1286+250")  # Define tamanho e posição (0px da esquerda, 0px do topo)
 janela.geometry("580x630+150+0")  # Define tamanho e posição (0px da esquerda, 0px do topo)
 janela.configure(bg="gray20")  # Define a cor de fundo para cinza escuro
 
-# Inicialização dos elementos
+
+# Frame para a label de exibição do texto
+frame_label = tk.Frame(janela, bg="black", width=580, height=120)  # Fundo preto
+frame_label.pack(pady=15, fill="both")  # Adiciona espaçamento entre a label e o topo da janela
+
 label = tk.Label(
-    janela, 
+    frame_label, 
     text="", 
     font=("Arial", 48), 
     pady=20, 
     bg="black",  # Fundo preto
     fg="white"   # Texto branco
 )
-label.pack(pady=30)
+label.grid(row=0, column=0, sticky="nsew")  # Preenche todo o espaço do frame
+label.pack()  # Exemplo de espaçamento vertical
 
 # Frame para configuração de PPM e botões de controle
-frame_controle = tk.Frame(janela, bg="gray30")  # Fundo cinza mais claro
-frame_controle.pack(pady=10)
+frame_controle = tk.Frame(janela, bg="gray20")  # Fundo cinza mais claro
+frame_controle.pack(pady=5)
 
 # Campo para definir a PPM
-frame_ppm = tk.Frame(frame_controle, bg="gray30")  # Fundo cinza mais claro
+frame_ppm = tk.Frame(frame_controle, bg="gray20")  # Fundo cinza mais claro
 frame_ppm.pack(side="left", padx=(0, 20))  # Adiciona espaçamento à direita
-tk.Label(frame_ppm, text="Velocidade (PPM):", font=("Arial", 14), bg="gray30", fg="white").pack(side="left")
-entry_ppm = tk.Entry(frame_ppm, width=5, font=("Arial", 14), bg="gray40", fg="white", insertbackground="white")  # Fundo cinza escuro, texto branco
+tk.Label(frame_ppm, text="Velocidade (PPM):", font=("Arial", 14), bg="gray20", fg="white").pack(side="left")
+entry_ppm = tk.Entry(frame_ppm, width=5, font=("Arial", 14), bg="gray20", fg="white", insertbackground="white")  # Fundo cinza escuro, texto branco
 entry_ppm.pack(side="left", padx=5)
 
 # Carrega o valor de PPM salvo no arquivo de configuração
@@ -248,11 +254,10 @@ carregar_config()
 criar_segunda_janela()  # Cria a segunda janela ao iniciar
 
 # Label para exibir o nome do arquivo selecionado
-label_arquivo = tk.Label(janela, text="Arquivo: Nenhum arquivo carregado", font=("Arial", 12), bg="gray30", fg="white")
-label_arquivo.pack()
+label_arquivo = tk.Label(janela, text="Arquivo: Nenhum arquivo carregado", font=("Arial", 12), bg="gray20", fg="white")
+label_arquivo.pack(pady=5)
 
 # Área de entrada de texto manual
-tk.Label(janela, text="Ou insira o texto abaixo:", font=("Arial", 12), bg="gray30", fg="white").pack(pady=10)
 text_input = tk.Text(janela, height=8, width=60, font=("Arial", 12), bg="gray40", fg="white", insertbackground="white")
 text_input.pack(pady=5)
 
@@ -268,15 +273,15 @@ botao_limpar_texto = tk.Button(janela, text="Limpar Texto", command=limpar_texto
 botao_limpar_texto.pack(pady=5)
 
 # Frame para os botões de controle
-frame_botoes = tk.Frame(frame_controle, bg="gray30")  # Fundo cinza mais claro
+frame_botoes = tk.Frame(frame_controle, bg="gray20")  # Fundo cinza mais claro
 frame_botoes.pack(side="right")
 
 # Botões de controle
 botao_iniciar = tk.Button(frame_botoes, text="Iniciar", command=iniciar, font=("Arial", 12), bg="gray40", fg="white")
-botao_iniciar.pack(pady=5)
+botao_iniciar.pack(pady=2)
 
 botao_reiniciar = tk.Button(frame_botoes, text="Reiniciar", command=reiniciar, font=("Arial", 12), bg="gray40", fg="white")
-botao_reiniciar.pack(pady=5)
+botao_reiniciar.pack(pady=0)
 
 # Loop principal da janela
 janela.mainloop()
