@@ -41,7 +41,7 @@ def criar_segunda_janela():
         segunda_janela.configure(bg="black")  # Fundo preto
         segunda_janela.geometry("1920x1080+1920+0")  # Define tamanho e posição
         segunda_janela.resizable(True, True)  # Permite redimensionamento
-        
+
         # Label para exibir o texto
         label_segunda_janela = tk.Label(
             segunda_janela,
@@ -92,7 +92,7 @@ def atualizar_label():
         # Se não houver mais palavras, reinicia a exibição
         reiniciar()
 
-# Função para iniciar a exibição (agora inclui a funcionalidade de "Usar Texto Inserido")
+# Função para iniciar a exibição
 def iniciar():
     global em_execucao, palavras
     if not em_execucao: # Verifica se a execução não está ativa
@@ -123,7 +123,6 @@ def iniciar():
         botao_iniciar.config(text="Iniciar")
         botao_iniciar.update()
     
-
 # Função para reiniciar a exibição
 def reiniciar():
     global texto, indice_palavra, em_execucao
@@ -178,6 +177,22 @@ def ajustar_intervalo(ppm=None):
         botao_iniciar.config(text="Iniciar")
         botao_iniciar.update()
 
+# Acelera a velocidade em 5%
+def acelerar():
+    ppm = int(entry_ppm.get())
+    ppm = int(ppm * 1.05)
+    entry_ppm.delete(0, tk.END)
+    entry_ppm.insert(0, ppm)
+    ajustar_intervalo(ppm)
+
+# Desacelera a velocidade em 5%
+def desacelerar():
+    ppm = int(entry_ppm.get())
+    ppm = int(ppm / 1.05)
+    entry_ppm.delete(0, tk.END)
+    entry_ppm.insert(0, ppm)
+    ajustar_intervalo(ppm)
+
 # Função para limpar o campo de entrada de texto manual
 def limpar_texto():
     text_input.delete("1.0", tk.END)
@@ -212,6 +227,8 @@ def colar_texto_com_foco():
 # Atalhos de teclado condicionados ao foco da janela
 keyboard.add_hotkey("ctrl+v", colar_texto_com_foco)  # Cola o texto com Ctrl+V
 keyboard.add_hotkey("space", iniciar_com_foco)  # Inicia/pausa a exibição com a barra de espaço
+keyboard.add_hotkey("+", acelerar) # Acelera a velocidade em 5%
+keyboard.add_hotkey("-", desacelerar) # Diminui a velocidade em 5%
 
 # Configuração da janela principal
 janela = tk.Tk()
@@ -246,11 +263,24 @@ frame_controle = tk.Frame(janela, bg="gray20")  # Fundo cinza mais claro
 frame_controle.pack(pady=5)
 
 # Campo para definir a PPM
-frame_ppm = tk.Frame(frame_controle, bg="gray20")  # Fundo cinza mais claro
-frame_ppm.pack(side="left", padx=(0, 20))  # Adiciona espaçamento à direita
-tk.Label(frame_ppm, text="Velocidade (PPM):", font=("Arial", 14), bg="gray20", fg="white").pack(side="left")
-entry_ppm = tk.Entry(frame_ppm, width=5, font=("Arial", 14), bg="gray20", fg="white", insertbackground="white")  # Fundo cinza escuro, texto branco
-entry_ppm.pack(side="left", padx=5)
+tk.Label(frame_controle, text="Velocidade (PPM):", font=("Arial", 14), bg="gray20", fg="white").grid(row=1,column=1, rowspan=2)
+entry_ppm = tk.Entry(frame_controle, width=5, font=("Arial", 14), bg="gray20", fg="white", insertbackground="white")  # Fundo cinza escuro, texto branco
+entry_ppm.grid(row=1, column=2, rowspan=2)
+
+# Botão para acelerar ppm
+botao_acelerar = tk.Button(frame_controle, text="+", command=acelerar, font=("Arial", 12), bg="gray40", fg="white", width=4)
+botao_acelerar.grid(row=1, column=3, padx=8)
+
+# Botão para desacelerar ppm
+botao_desacelerar = tk.Button(frame_controle, text="-", command=desacelerar, font=("Arial", 12), bg="gray40", fg="white", width=4)
+botao_desacelerar.grid(row=2, column=3, padx=8)
+
+# Botões de controle
+botao_iniciar = tk.Button(frame_controle, text="Iniciar", command=iniciar, font=("Arial", 12), bg="gray40", fg="white")
+botao_iniciar.grid(row=1, column=4, padx=5)
+
+botao_reiniciar = tk.Button(frame_controle, text="Reiniciar", command=reiniciar, font=("Arial", 12), bg="gray40", fg="white")
+botao_reiniciar.grid(row=2, column=4,  padx=5, pady=5)
 
 # Carrega o valor de PPM salvo no arquivo de configuração
 carregar_config()
@@ -274,17 +304,6 @@ botao_colar_texto.pack(pady=5)
 
 botao_limpar_texto = tk.Button(janela, text="Limpar Texto", command=limpar_texto, font=("Arial", 12), bg="gray40", fg="white")
 botao_limpar_texto.pack(pady=5)
-
-# Frame para os botões de controle
-frame_botoes = tk.Frame(frame_controle, bg="gray20")  # Fundo cinza mais claro
-frame_botoes.pack(side="right")
-
-# Botões de controle
-botao_iniciar = tk.Button(frame_botoes, text="Iniciar", command=iniciar, font=("Arial", 12), bg="gray40", fg="white")
-botao_iniciar.pack(pady=2)
-
-botao_reiniciar = tk.Button(frame_botoes, text="Reiniciar", command=reiniciar, font=("Arial", 12), bg="gray40", fg="white")
-botao_reiniciar.pack(pady=0)
 
 # Loop principal da janela
 janela.mainloop()
