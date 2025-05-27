@@ -1,9 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
-import json
-import os
-import keyboard
-import time
+import json, os, keyboard, time
+from screeninfo import get_monitors
 
 # Variáveis globais
 indice_palavra = 0
@@ -34,23 +32,28 @@ def salvar_config(ppm):
 
 # Função para criar a segunda janela e exibir o texto iterado
 def criar_segunda_janela():
-    global segunda_janela, label_segunda_janela
-    segunda_janela = tk.Toplevel(janela)
-    segunda_janela.title("Exibição do Texto")
-    segunda_janela.configure(bg="black")  # Fundo preto
-    segunda_janela.geometry("1910x1080+1920+0")  # Define tamanho e posição (900px da esquerda, alinhado ao topo da janela principal)
-    segunda_janela.resizable(True, True)  # Permite redimensionamento
-
-    # Label para exibir o texto
-    label_segunda_janela = tk.Label(
-        segunda_janela,
-        text="", 
-        font=("Arial", 62), 
-        bg="black",  # Fundo preto
-        fg="white",  # Texto branco
-        anchor="center"
-    )
-    label_segunda_janela.pack(expand=True, fill="both")  # Centraliza e preenche a janela
+    monitores = get_monitors()  # Obtém a lista de monitores conectados
+    if len(monitores) > 1:
+        print("Múltiplos monitores detectados. Criando segunda janela.")
+        global segunda_janela, label_segunda_janela
+        segunda_janela = tk.Toplevel(janela)
+        segunda_janela.title("Exibição do Texto")
+        segunda_janela.configure(bg="black")  # Fundo preto
+        segunda_janela.geometry("1920x1080+1920+0")  # Define tamanho e posição
+        segunda_janela.resizable(True, True)  # Permite redimensionamento
+        
+        # Label para exibir o texto
+        label_segunda_janela = tk.Label(
+            segunda_janela,
+            text="", 
+            font=("Arial", 62), 
+            bg="black",  # Fundo preto
+            fg="white",  # Texto branco
+            anchor="center"
+        )
+        label_segunda_janela.pack(expand=True, fill="both")  # Centraliza e preenche a janela
+    else:
+        print("Apenas um monitor detectado. A segunda janela não será criada.")
 
 # Atualiza o texto na segunda janela
 def atualizar_label():
