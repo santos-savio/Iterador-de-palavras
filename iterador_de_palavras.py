@@ -77,7 +77,7 @@ def atualizar_label():
         # Se houver um ponto de interrogação na palavra, atrasa 120%
         elif "?" in texto:
         # Se houver uma queba de linha, atrasa 220%
-            janela.after(int(intervalo * 2,2), atualizar_label)
+            janela.after(int(intervalo * 2.2), atualizar_label)
         # Se houver uma quebra de linha, atrasa 350%
         elif "\n" in texto:
             janela.after(int(intervalo * 2.5), atualizar_label)
