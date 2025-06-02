@@ -224,6 +224,21 @@ def colar_texto_com_foco():
     if janela.focus_get():  # Verifica se a janela está em foco
         colar_texto()
 
+def fechar_segunda_janela():
+    global segunda_janela
+    # if 'segunda_janela' in globals() and segunda_janela.winfo_exists():
+    #     segunda_janela.destroy()  # Fecha a segunda janela se ela existir
+    #     print("Segunda janela fechada.")
+    # else:
+    #     print("Segunda janela não existe ou já foi fechada.")
+
+    if 'segunda_janela' in globals() and segunda_janela.winfo_exists():
+        segunda_janela.destroy() 
+        print("Segunda janela fechada.")
+    else:
+        criar_segunda_janela()  # Cria a segunda janela se não existir
+        print("Segunda janela criada.")
+
 # Atalhos de teclado condicionados ao foco da janela
 keyboard.add_hotkey("ctrl+v", colar_texto_com_foco)  # Cola o texto com Ctrl+V
 keyboard.add_hotkey("space", iniciar_com_foco)  # Inicia/pausa a exibição com a barra de espaço
@@ -281,6 +296,9 @@ botao_iniciar.grid(row=1, column=4, padx=5)
 
 botao_reiniciar = tk.Button(frame_controle, text="Reiniciar", command=reiniciar, font=("Arial", 12), bg="gray40", fg="white")
 botao_reiniciar.grid(row=2, column=4,  padx=5, pady=5)
+
+botao_fechar_segunda_janela = tk.Button(frame_controle, text="Tela 2", command= fechar_segunda_janela, font=("Arial", 12), bg="gray40", fg="white")
+botao_fechar_segunda_janela.grid(row=1, column=5, padx=5)
 
 # Carrega o valor de PPM salvo no arquivo de configuração
 carregar_config()
