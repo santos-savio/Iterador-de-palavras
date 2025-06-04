@@ -98,9 +98,6 @@ def iniciar():
     if not em_execucao: # Verifica se a execução não está ativa
         # Obtém o texto do campo de entrada manual, se houver
         conteudo = text_input.get("1.0", tk.END).strip()
-        botao_iniciar.config(text="Pausar")  # Atualiza o texto do botão Iniciar para "Pausar"
-        botao_iniciar.update()  # Atualiza o botão imediatamente
-        
         if conteudo:
             palavras = conteudo.split()  # Divide o texto em palavras
             # reiniciar()  # Reinicia a exibição para o novo conteúdo
@@ -108,10 +105,17 @@ def iniciar():
         elif not palavras:
             pergunta = messagebox.askyesno("Atenção", "Deseja colar o conteúdo da área de transferência?")
             if pergunta:
-                colar_texto()
-                time.sleep(0.5) 
-                iniciar()
-            return
+                if colar_texto() == "erro":
+                    messagebox.showwarning("Atenção", "Não há texto na área de transferência para colar.")
+                    return     
+                else:
+                    iniciar()  # Inicia a exibição após colar o texto  
+                    return         
+            else:
+                return
+
+        botao_iniciar.config(text="Pausar")  # Atualiza o texto do botão Iniciar para "Pausar"
+        botao_iniciar.update()  # Atualiza o botão imediatamente
 
         # Inicia a exibição do texto
         if palavras:
@@ -180,7 +184,7 @@ def ajustar_intervalo(ppm=None):
 # Acelera a velocidade em 5%
 def acelerar():
     ppm = int(entry_ppm.get())
-    ppm = int(ppm * 1.05)
+    ppm = int(ppm + 25)
     entry_ppm.delete(0, tk.END)
     entry_ppm.insert(0, ppm)
     ajustar_intervalo(ppm)
@@ -188,7 +192,7 @@ def acelerar():
 # Desacelera a velocidade em 5%
 def desacelerar():
     ppm = int(entry_ppm.get())
-    ppm = int(ppm / 1.05)
+    ppm = int(ppm - 25)
     entry_ppm.delete(0, tk.END)
     entry_ppm.insert(0, ppm)
     ajustar_intervalo(ppm)
@@ -207,11 +211,15 @@ def limpar_texto():
 
 # Função para colar texto da área de transferência no campo de entrada
 def colar_texto():
-    texto_copiado = janela.clipboard_get()  # Obtém o texto da área de transferência
-    text_input.delete("1.0", tk.END)  # Limpa o campo de texto
-    text_input.insert("1.0", texto_copiado)  # Insere o texto copiado no campo de texto
-    if texto_copiado:
-        label_arquivo.config(text="Texto colado da área de transferência")  # Atualiza o rótulo do arquivo
+    try:
+        texto_copiado = janela.clipboard_get()  # Obtém o texto da área de transferência
+        if texto_copiado:
+            text_input.delete("1.0", tk.END)  # Limpa o campo de texto
+            text_input.insert("1.0", texto_copiado)  # Insere o texto copiado no campo de texto
+            label_arquivo.config(text="Texto colado da área de transferência")  # Atualiza o rótulo do arquivo
+    except tk.TclError:
+        print("Erro ao acessar a área de transferência.")
+        return "erro"  # Retorna 1 se não houver texto na área de transferência ou ocorrer um erro
 
 
 # Função para iniciar/pausar a exibição apenas se a janela estiver em foco
@@ -242,8 +250,8 @@ def fechar_segunda_janela():
 # Atalhos de teclado condicionados ao foco da janela
 keyboard.add_hotkey("ctrl+v", colar_texto_com_foco)  # Cola o texto com Ctrl+V
 keyboard.add_hotkey("space", iniciar_com_foco)  # Inicia/pausa a exibição com a barra de espaço
-keyboard.add_hotkey("+", acelerar) # Acelera a velocidade em 5%
-keyboard.add_hotkey("-", desacelerar) # Diminui a velocidade em 5%
+keyboard.add_hotkey("ctrl+=", acelerar) # Acelera a velocidade em 5%
+keyboard.add_hotkey("ctrl+-", desacelerar) # Diminui a velocidade em 5%
 
 # Configuração da janela principal
 janela = tk.Tk()
