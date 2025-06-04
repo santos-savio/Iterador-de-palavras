@@ -246,6 +246,7 @@ def fechar_segunda_janela():
 keyboard.add_hotkey("ctrl+v", colar_texto_com_foco)  # Cola o texto com Ctrl+V
 keyboard.add_hotkey("space", iniciar_com_foco)  # Inicia/pausa a exibição com a barra de espaço
 keyboard.add_hotkey("ctrl+=", acelerar) # Acelera a velocidade em 5%
+keyboard.add_hotkey("ctrl+add", acelerar) # Acelera a velocidade em 5%
 keyboard.add_hotkey("ctrl+-", desacelerar) # Diminui a velocidade em 5%
 
 # Configuração da janela principal
