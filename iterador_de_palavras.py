@@ -234,11 +234,6 @@ def colar_texto_com_foco():
 
 def fechar_segunda_janela():
     global segunda_janela
-    # if 'segunda_janela' in globals() and segunda_janela.winfo_exists():
-    #     segunda_janela.destroy()  # Fecha a segunda janela se ela existir
-    #     print("Segunda janela fechada.")
-    # else:
-    #     print("Segunda janela não existe ou já foi fechada.")
 
     if 'segunda_janela' in globals() and segunda_janela.winfo_exists():
         segunda_janela.destroy() 
